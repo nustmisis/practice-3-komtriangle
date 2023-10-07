@@ -33,5 +33,27 @@ import re
 
 def format_phone_number(text):
     # ваше решение:
+    exprs = "([+]?[7,8])?[-\s(]?(\d{3})[-\s)]?(\d{3})[-\s]?(\d{2})[-\s]?(\d{2})"
+
+    re_result = re.fullmatch(exprs, text)
+
+    if re_result:
+        return f"+7 {re_result.group(2)} {re_result.group(3)}-{re_result.group(4)}-{re_result.group(5)}"
 
     return "Fail!"
+
+
+tests: list[tuple[str, str]] = [
+    ("+7 123 456-78-90", "+7 123 456-78-90"),
+    ("8(123)456-78-90", "+7 123 456-78-90"),
+    ("1234567890", "+7 123 456-78-90"),
+    ("123456789", "Fail!"),
+    ("+9 123 456-78-90", "Fail!"),
+    ("+7 123 456+78=90", "Fail!"),
+]
+
+
+def test_task_3():
+    for phone, expected in tests:
+        actual = format_phone_number(phone)
+        assert actual == expected
